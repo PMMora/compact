@@ -13,5 +13,6 @@ def select_all_from_yield():
 
 	for row in rows:
 		print(row)
+	return rows
 
 select_all_from_yield()
