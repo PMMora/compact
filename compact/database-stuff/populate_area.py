@@ -1,5 +1,5 @@
 import sqlite3, os
-#
+
 def create_connection(db_file):
     try:
         conn = sqlite3.connect(db_file)
@@ -71,9 +71,7 @@ def create_area_info():
                     '56':'Wyoming'}
     with conn:
         for key, value in fips_name_dic.items():
-            info = []
-            info.append(key)
-            info.append(value)
+            info = [key, value]
             create_area_row(conn,info)
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
