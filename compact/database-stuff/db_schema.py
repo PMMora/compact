@@ -33,16 +33,16 @@ def main():
     db = os.path.join(base_dir, 'db.sqlite3')
 
     sql_create_area_table = """ CREATE TABLE IF NOT EXISTS area (
-                                fips integer PRIMARY KEY,
+                                fips text PRIMARY KEY,
                                 name text
                                ); """
     sql_create_industry_table = """ CREATE TABLE IF NOT EXISTS industry (
-                                naics integer PRIMARY KEY,
+                                naics text PRIMARY KEY,
                                 name text
                                 ); """
     sql_create_yield_table = """ CREATE TABLE IF NOT EXISTS yield (
-                                fips_id integer,
-                                naics_id integer,
+                                fips_id text,
+                                naics_id text,
                                 year integer,
                                 disclosure_code text,
                                 establishments integer,

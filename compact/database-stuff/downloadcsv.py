@@ -10,7 +10,7 @@ fips = ['01','02','04','05','06','08','09','10','11','12','13','15','16','17','1
 
 def getCSV():
     for state in fips:
-        url = 'http://www.bls.gov/cew/data/api/2016/a/area/{}000.csv'.format(state)
+        url = 'http://www.bls.gov/cew/data/api/2015/a/area/{}000.csv'.format(state)
         webbrowser.open(url)
 
 getCSV()
