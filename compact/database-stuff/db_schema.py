@@ -42,6 +42,7 @@ def main():
                                 ); """
     sql_create_yield_table = """ CREATE TABLE IF NOT EXISTS yield (
                                 fips_id text,
+                                own_code text,
                                 naics_id text,
                                 year integer,
                                 disclosure_code text,

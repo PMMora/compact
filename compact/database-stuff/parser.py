@@ -2,13 +2,14 @@ import os, csv, sqlite3
 
 def get_header_index(file):
     fips = 'area_fips'
+    own_code = 'own_code'
     naics = 'industry_code'
     year = 'year'
     disclosure_code = 'disclosure_code'
     establishments = 'annual_avg_estabs'
     employees = 'annual_avg_emplvl'
     wages = 'total_annual_wages'
-    input_list = [fips, naics, year, disclosure_code, establishments,employees,wages]
+    input_list = [fips, own_code, naics, year, disclosure_code, establishments,employees,wages]
     with open(file, newline='\n') as f:
         reader = csv.reader(f)
         row1 = next(reader)
@@ -28,8 +29,8 @@ def create_connection(db_file):
     return None
 
 def create_yield_row(conn, yield_row):
-    sql = ''' INSERT INTO yield (fips_id, naics_id, year, disclosure_code, establishments, employees, wages)
-                VALUES(?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO yield (fips_id, own_code, naics_id, year, disclosure_code, establishments, employees, wages)
+                VALUES(?,?,?,?,?,?,?,?) '''
     cur = conn.cursor()
     cur.execute(sql, yield_row)
     return cur.lastrowid
@@ -52,7 +53,7 @@ def parse_all_csv_into_db():
                         for i in indexes:
                             if i == indexes[0]:
                                 info.append(row[i][:2])
-                            elif i == indexes[1]:
+                            elif i == indexes[2]:
                                 if len(row[i]) == 3 or len(row[i]) == 6:
                                     info.append(row[i])
                                 else:
