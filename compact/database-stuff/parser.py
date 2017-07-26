@@ -53,12 +53,6 @@ def parse_all_csv_into_db():
                         for i in indexes:
                             if i == indexes[0]:
                                 info.append(row[i][:2])
-                            elif i == indexes[2]:
-                                if len(row[i]) == 3 or len(row[i]) == 6:
-                                    info.append(row[i])
-                                else:
-                                    info = []
-                                    break
                             else:
                                 info.append(row[i])
                         if info:

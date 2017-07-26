@@ -36,14 +36,12 @@ def select_column_yield(conn, column_name, fips, own, naics, year):
                     AND year = '{}' '''.format(column_name,fips,own,naics,year)
     cur = conn.cursor()
     cur.execute(sql)
-    row = cur.fetchone()
-    return row
+    return cur.fetchone()[0]
+
 def get_area_name(conn, fips):
     '''return the name of an area based off the fips_id'''
     sql = '''SELECT name FROM area
                 WHERE fips = '{}' '''.format(fips)
     cur = conn.cursor()
     cur.execute(sql)
-    print(cur.fetchone()[0])
-
-get_area_name(conn, '01')
+    return cur.fetchone()[0]

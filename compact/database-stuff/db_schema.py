@@ -38,7 +38,8 @@ def main():
                                ); """
     sql_create_industry_table = """ CREATE TABLE IF NOT EXISTS industry (
                                 naics text PRIMARY KEY,
-                                name text
+                                bea_sector_id text,
+                                description text
                                 ); """
     sql_create_yield_table = """ CREATE TABLE IF NOT EXISTS yield (
                                 fips_id text,
