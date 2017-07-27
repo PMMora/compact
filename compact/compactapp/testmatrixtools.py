@@ -1,123 +1,129 @@
 import unittest
-from matrixtools import BlankMatrix, \
-    IdentityMatrix, \
-    ShortToLong, \
-    LongToShort, \
-    ShortMatricesCompatible, \
-    ListToSublists,\
-    ListOfSublistsToListOfSums,\
-    AddShort, \
-    SubtractShort, \
-    MultiplyShort, \
-    DivideShort
+from matrixtools import blank_matrix, \
+    identity_matrix, \
+    short_to_long, \
+    long_to_short, \
+    short_matrices_compatible, \
+    list_to_sublists,\
+    list_of_sublists_to_list_of_sums,\
+    add_short, \
+    subtract_short, \
+    multiply_short, \
+    divide_short, \
+    transpose
 
 
-class testBlankMatrix(unittest.TestCase):
-    # Test BlankMatrix by creating three different blank matrices of different dimensions
-    def testBlankMatrixSquare(self):
-        assert BlankMatrix(2, 2) == [[0, 0], [0, 0]]
+class testblank_matrix(unittest.TestCase):
+    # Test blank_matrix by creating three different blank matrices of different dimensions
+    def testblank_matrixSquare(self):
+        assert blank_matrix(2, 2) == [[0, 0], [0, 0]]
 
-    def testBlankMatrixTall(self):
-        assert BlankMatrix(3, 6) == [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
+    def testblank_matrixTall(self):
+        assert blank_matrix(3, 6) == [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
 
-    def testBlankMatrixWide(self):
-        assert BlankMatrix(6, 3) == [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
-
-class testIdentityMatrix(unittest.TestCase):
-    # Test IdentityMatrix by creating a square identity matrix
-    def testIdentityMatrixSquare(self):
-        assert IdentityMatrix(2, 2) == [[1, 0], [0, 1]]
+    def testblank_matrixWide(self):
+        assert blank_matrix(6, 3) == [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 
-class testShortToLong(unittest.TestCase):
+class testidentity_matrix(unittest.TestCase):
+    # Test identity_matrix by creating a square identity matrix
+    def testidentity_matrixSquare(self):
+        assert identity_matrix(2, 2) == [[1, 0], [0, 1]]
+
+
+class testshort_to_long(unittest.TestCase):
     # Test ShortToLong by converting a 3x3 matrix from short form to long form
-    def testShortToLong(self):
-        assert ShortToLong([[0, 1, 2], [3, 4, 5], [6, 7, 8]]) == [[0, 1, 2, 3, 4, 5, 6, 7, 8], 3, 3]
+    def testshort_to_long(self):
+        assert short_to_long([[0, 1, 2], [3, 4, 5], [6, 7, 8]]) == [[0, 1, 2, 3, 4, 5, 6, 7, 8], 3, 3]
 
 
-class testLongToShort(unittest.TestCase):
+class testlong_to_short(unittest.TestCase):
     # Test LongToShort
-    def testLongToShort(self):
-        assert LongToShort([[0, 1, 2, 3, 4, 5, 6, 7, 8], 3, 3]) == [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+    def testlong_to_short(self):
+        assert long_to_short([[0, 1, 2, 3, 4, 5, 6, 7, 8], 3, 3]) == [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 
 
-class testShortMatricesCompatible(unittest.TestCase):
+class testshort_matrices_compatible(unittest.TestCase):
     # Test ShortMatricesCompatible
-    def testShortMatricesCompatible(self):
-        assert ShortMatricesCompatible([[0, 0], [0, 0], [0, 0]], [[0, 0], [0, 0], [0, 0]]) == [1, 1, 1]
+    def testshort_matrices_compatible(self):
+        assert short_matrices_compatible([[0, 0], [0, 0], [0, 0]], [[0, 0], [0, 0], [0, 0]]) == [1, 1, 1]
 
     # Assert that different numbers of sublists == {True, False, True]
-    def testShortMatricesCompatibleFailLength(self):
-        assert ShortMatricesCompatible([[0, 0]], [[0, 0], [0, 0], [0, 0]]) == [0, 1, 0]
+    def testshort_matrices_compatible_fail_sublists(self):
+        assert short_matrices_compatible([[0, 0]], [[0, 0], [0, 0], [0, 0]]) == [0, 1, 0]
 
     # Assert that different numbers of values == {True, False, False]
-    def testShortMatricesCompatibleFailLength(self):
-        assert ShortMatricesCompatible([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]]) == [1, 0, 0]
+    def testshort_matrices_compatible_fail_values(self):
+        assert short_matrices_compatible([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]]) == [1, 0, 0]
 
 
-class testListToSublists(unittest.TestCase):
-    def testListToSublists(self):
-        assert ListToSublists([0, 1, 2], 3) == [[0, 0, 0], [1, 1, 1], [2, 2, 2]]
+class testlist_to_sublists(unittest.TestCase):
+    def testlist_to_sublists(self):
+        assert list_to_sublists([0, 1, 2], 3) == [[0, 0, 0], [1, 1, 1], [2, 2, 2]]
 
-    def testListToSublistsTall(self):
-        assert ListToSublists([0, 1, 2], 5) == [[0, 0, 0, 0, 0], [1, 1, 1, 1, 1], [2, 2, 2, 2, 2]]
+    def testlist_to_sublists_tall(self):
+        assert list_to_sublists([0, 1, 2], 5) == [[0, 0, 0, 0, 0], [1, 1, 1, 1, 1], [2, 2, 2, 2, 2]]
 
-    def testListToSublistsWide(self):
-        assert ListToSublists([0, 1, 2], 2) == [[0, 0], [1, 1], [2, 2]]
-
-
-class testListOfSublistsToListOfSums(unittest.TestCase):
-    def testListOfSublistsToListOfSums(self):
-        assert ListOfSublistsToListOfSums([[0, 0, 0], [1, 1, 1], [2, 2, 2]]) == [0, 3, 6]
-
-    def testListOfSublistsToListOfSumsNegatives(self):
-        assert ListOfSublistsToListOfSums([[0, -1, 0], [1, 1, -1], [2, 2, -2]]) == [-1, 1, 2]
-
-    def testListOfSublistsToListOfSumsMixedLists(self):
-        assert ListOfSublistsToListOfSums([[0, -4], [1], [109, 1, 1, -1]]) == [-4, 1, 110]
+    def testlist_to_sublists_wide(self):
+        assert list_to_sublists([0, 1, 2], 2) == [[0, 0], [1, 1], [2, 2]]
 
 
-class testAddShort(unittest.TestCase):
-    def testAddShort(self):
-        assert AddShort([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [[2, 2, 2], [2, 2, 2], [2, 2, 2]]) \
+class testlist_of_sublists_to_list_of_sums(unittest.TestCase):
+    def testlist_of_sublists_to_list_of_sums(self):
+        assert list_of_sublists_to_list_of_sums([[0, 0, 0], [1, 1, 1], [2, 2, 2]]) == [0, 3, 6]
+
+    def testlist_of_sublists_to_list_of_sums_negatives(self):
+        assert list_of_sublists_to_list_of_sums([[0, -1, 0], [1, 1, -1], [2, 2, -2]]) == [-1, 1, 2]
+
+    def testlist_of_sublists_to_list_of_sums_mixed(self):
+        assert list_of_sublists_to_list_of_sums([[0, -4], [1], [109, 1, 1, -1]]) == [-4, 1, 110]
+
+
+class testadd_short(unittest.TestCase):
+    def testadd_short(self):
+        assert add_short([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [[2, 2, 2], [2, 2, 2], [2, 2, 2]]) \
                == [[3, 3, 3], [3, 3, 3], [3, 3, 3]]
 
-    def testAddShortError(self):
+    def testadd_short_error(self):
         with self.assertRaises(Exception) as context:
-            AddShort([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
+            add_short([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
         self.assertTrue('Tried positionally adding two matrices of different dimensions' in str(context.exception))
 
 
-class testSubtractShort(unittest.TestCase):
-    def testSubtractShort(self):
-        assert SubtractShort([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [[2, 2, 2], [2, 2, 2], [2, 2, 2]]) \
+class testsubtract_short(unittest.TestCase):
+    def testsubtract_short(self):
+        assert subtract_short([[1, 1, 1], [1, 1, 1], [1, 1, 1]], [[2, 2, 2], [2, 2, 2], [2, 2, 2]]) \
                == [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
-    def testSubtractShortError(self):
+    def testsubtract_short_error(self):
         with self.assertRaises(Exception) as context:
-            SubtractShort([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
+            subtract_short([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
         self.assertTrue('Tried positionally subtracting two matrices of different dimensions' in str(context.exception))
 
 
-class testMultiplyShort(unittest.TestCase):
-    def testMultiplyShort(self):
-        assert MultiplyShort([[3, 2, 2], [2, 3, 2], [2, 2, 3]], [[3, 3, 3], [3, 3, 3], [3, 3, 3]]) \
+class testmultiply_short(unittest.TestCase):
+    def testmultiply_short(self):
+        assert multiply_short([[3, 2, 2], [2, 3, 2], [2, 2, 3]], [[3, 3, 3], [3, 3, 3], [3, 3, 3]]) \
                == [[9, 6, 6], [6, 9, 6], [6, 6, 9]]
 
-    def testMultiplyShortError(self):
+    def testmultiply_short_error(self):
         with self.assertRaises(Exception) as context:
-            MultiplyShort([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
+            multiply_short([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
         self.assertTrue('Tried positionally multiplying two matrices of different dimensions' in str(context.exception))
 
 
-class testDivideShort(unittest.TestCase):
-    def testDivideShort(self):
-        assert DivideShort([[4, 2, 2], [2, 4, 2], [2, 2, 4]], [[2, 2, 2], [2, 2, 2], [2, 2, 2]]) \
+class testdivide_short(unittest.TestCase):
+    def testdivide_short(self):
+        assert divide_short([[4, 2, 2], [2, 4, 2], [2, 2, 4]], [[2, 2, 2], [2, 2, 2], [2, 2, 2]]) \
                == [[2, 1, 1], [1, 2, 1], [1, 1, 2]]
 
-    def testDivideShortError(self):
+    def testdivide_short_error(self):
         with self.assertRaises(Exception) as context:
-            DivideShort([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
+            divide_short([[0], [0], [0]], [[0, 0], [0, 0], [0, 0]])
         self.assertTrue('Tried positionally dividing two matrices of different dimensions' in str(context.exception))
+
+
+class testtranspose(unittest.TestCase):
+    def testtranspose(self):
+        assert transpose([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
 
