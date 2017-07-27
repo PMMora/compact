@@ -17,7 +17,7 @@ def create_industry_row(conn, industry_row):
     return cur.lastrowid
 
 def insert_industry_info():
-    wb = load_workbook(filename='USNaicsMatch.xlsx')
+    wb = load_workbook(filename='FinalNAICStoIOMatch.xlsx')
     ws = wb['NAICS to Sector']
     row_range = ws[2:465]
     for rows in row_range:
