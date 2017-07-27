@@ -117,5 +117,3 @@ def transpose(shortA):
     transposed = [list(i) for i in zip(*shortA)]
     print(transposed)
     return transposed
-
-transpose([[1, 2], [3, 4]])
