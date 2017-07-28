@@ -64,10 +64,6 @@ with conn:
                 total_disclosed = get_totals_of_disclosed_rows(conn, gen_naics, year, area)
 
                 undisclosed_rows = 0
-                for j in total_disclosed[1:2]:
-                    print(j)
-                for i in total_disclosed:
-                    print(i)
 
                 for disclosed_row in total_disclosed[1:]:
                     if disclosed_row[3] == 0 and disclosed_row[4] ==0:
@@ -83,4 +79,4 @@ with conn:
                 est_wages = round(total_wages/undisclosed_rows)
                 #print([total_employees,total_wages])
         #print([naics, year, area, est_employees, est_wages])
-        #update_non_disclosed_row(conn, str(naics), str(year), str(area), str(est_wages), str(est_employees))
+    update_non_disclosed_row(conn, str(naics), str(year), str(area), str(est_wages), str(est_employees))
