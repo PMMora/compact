@@ -584,7 +584,6 @@ def determine_direct_requirements(geo='US', year=2015, lq_type='wage'):
     ]
     direct_requirements = multiply_short(list_to_sublists(lqs, 67), raw_direct_requirements)
     return direct_requirements
-determine_direct_requirements()
 
 
 # to do:
@@ -656,9 +655,9 @@ def impact(direct_requirements, impact_input):
         12283684000000
     ]
     type_1_A = subtract_short(identity_matrix(67, 67), divide_short(direct_requirements, list_to_sublists(industry_totals, 67)))
-    type_1_B = type_1_A
+    type_1_B = subtract_short(identity_matrix(67, 67), divide_short(direct_requirements, list_to_sublists(industry_totals, 67)))
     del type_1_B[:1]
-    for i in type_1_A:
+    for i in type_1_B:
         del i[:1]
     direct_and_indirect = inv(numpy.array(type_1_B)).tolist()
     direct_indirect_and_induced = inv(numpy.array(type_1_A)).tolist()
