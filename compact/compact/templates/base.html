@@ -3,14 +3,35 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>"Compact Input/Output Report Generator"</title>
+		<title>Compact Input/Output Report Generator</title>
 	</head>
 
 	<link type="text/css" rel="stylesheet" href="{% static 'styles.css' %}">
 	<body>
-		<div id="option_title">"Simple Analysis\n"</div>
-		<div id="option_subtitle">"High-level view of industry-wide impact."</div>
-		<div id="option_body">"test content"
+		<header>Compact Input/Output Report Generator</header>
+		<br>
+		<br>
+		<div id="option_title">Simple Analysis</div>
+		<div id="option_subtitle">High-level view of industry-wide impact.</div>
+		<div id="container">
+		<div id="option_body">Industry:</div>
+		<form action="/action_page.php">
+  			<input list="Industries">
+  				<datalist id="Industries">
+  					{% for industry in industry.name.all%}
+    				<option value=test></option>
+    				{% endfor %}
+				</datalist> 
+		</form>
+		<button type=button onclick action="/redirect.html">Run Report</button>
 		</div>
+		<div id="container">
+		<div id="option_body">State:</div>
+
+		</div>
+		<br>
+		<br>
+		<div id="option_title">Advanced Analysis</div>
+		<div id="option_subtitle">Filter by 6-digit NAICS code and custom business details.</div>
 	</body>
 </html>
