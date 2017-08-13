@@ -1,5 +1,8 @@
 body {
-    background-color: #eee;
+    background-image:url(https://static.pexels.com/photos/373965/pexels-photo-373965.jpeg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
     color: #111;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     padding:0;
@@ -9,7 +12,7 @@ body {
     margin:15px;
     padding:0;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 30px;
+    font-size: 26px;
     color:#00203a;
 }
 #option_subtitle {
@@ -21,6 +24,7 @@ body {
     color:#00203a;
     border-bottom-style: solid;
     border-bottom-width: 5px;
+    border-color:#000;
 }
 #option_body {
     padding:0;
@@ -37,17 +41,36 @@ body {
     display: inline-block;
 }
 
+#page-border {
+    margin-top:5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+    border-style:double;
+    background-color:#bcbcbc;
+    opacity:0.8;
+}
+
+#header-menu {
+    text-align: right;
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size:14px;
+    margin-right:20px;
+
+}
+
 header {
     color:#000;
-    background-color:#bcbcbc;
     margin:15px;
     margin-right:15px;
     padding:0;
     font-size:36px;
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    text-align:center;
     border-bottom-style: solid;
     border-bottom-width: 3px;
     border-bottom-color: #000;
+
 }
 #control-bar {
     margin: 0em 0em 1em;
@@ -64,3 +87,9 @@ button {
     margin: 15px;
     font-size: 12px;
 }
+
+label {
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 14px;
+}
+

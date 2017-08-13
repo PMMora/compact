@@ -8,7 +8,9 @@
 
 	<link type="text/css" rel="stylesheet" href="{% static 'styles.css' %}">
 	<body>
+	<div id="page-border">
 		<header>Compact Input/Output Report Generator</header>
+		<div id="header-menu">About | User Manual | FAQ</div>
 		<br>
 		<br>
 		<div id="option_title">Simple Analysis</div>
@@ -35,9 +37,6 @@
 				<input type="submit" value="Run Report">
 			</div>
 		</form>
-		</div>
-		<br>
-		<br>
 		<div id="option_title">Advanced Analysis</div>
 		<div id="option_subtitle">Filter by 6-digit NAICS code and custom business details.</div>
 		<form name = "Advanced Analysis" action="Placeholder for submitting to model" method ="post">
@@ -70,12 +69,26 @@
 				<input type=text name="AnnualWages" placeholder="Optional">
 			</div>
 
-			</div>
 			<br>
 
 			<div id="container">
 				<input type="submit" value="Run Report">
 			</div>
+
+			<div id="option_title">Additional options</div>
+			<div id="option_subtitle">(Only applicable to Advanced Analysis)</div>
+
+			<div id="container">
+				 <input type=checkbox name="EmployeeBasedLC">
+				 <label for="EmployeeBasedLC">Use Employee-Based Location Quotients</label>
+			</div>
+			<div id="container">
+				 <input type=checkbox name"WageBasedLC">
+				 <label for="WageBasedLC">Use Wage-Based Location Quotients</label>
+			</div>
+
+
 		</form>
+	</div>
 	</body>
 </html>
