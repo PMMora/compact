@@ -13,25 +13,69 @@
 		<br>
 		<div id="option_title">Simple Analysis</div>
 		<div id="option_subtitle">High-level view of industry-wide impact.</div>
-		<div id="container">
-		<div id="option_body">Industry:</div>
-		<form action="/action_page.php">
-  			<input list="Industries">
-  				<datalist id="Industries">
-  					{% for industry in industry.name.all%}
-    				<option value=test></option>
-    				{% endfor %}
-				</datalist> 
+		<form name = "Simple Analysis" action="Placeholder for submitting to model" method ="post">
+			<div id="container">
+				<div id="option_body">Industry:</div><br>
+  					<select id="Industries" title="Industries" required>
+  						{% for industry in industry %}
+    					<option value="1">{{ industry.name }}</option>
+    					{% endfor %}
+					</select>
+			</div>
+			<div id="container">
+				<div id="option_body">State:</div><br>
+					<select id="States" title="States" required>
+						{% for area in area %}
+						<option value="{{area.fips}}"> {{area.name}} </option>
+						{% endfor %}
+					</select>
+			</div>
+			<br>
+			<div id="container">
+				<input type="submit" value="Run Report">
+			</div>
 		</form>
-		<button type=button onclick action="/redirect.html">Run Report</button>
-		</div>
-		<div id="container">
-		<div id="option_body">State:</div>
-
 		</div>
 		<br>
 		<br>
 		<div id="option_title">Advanced Analysis</div>
 		<div id="option_subtitle">Filter by 6-digit NAICS code and custom business details.</div>
+		<form name = "Advanced Analysis" action="Placeholder for submitting to model" method ="post">
+			<div id="container">
+				<div id="option_body">NAICS Code:</div><br>
+				<input type=text name="NAICSCode" placeholder="Required" required>
+			</div>
+
+			<div id="container">
+				<div id="option_body">State:</div><br>
+					<select id = "State" title = "State" value="Required" required>
+						{% for area in area.objects.all %}
+						<option value=1> {{area}} </option>
+						{% endfor %}
+					</select>
+			</div>
+
+			<div id="container">
+				<div id="option_body">Revenue:</div><br>
+				<input type=text name="Revenue" placeholder="Optional">
+			</div>
+
+			<div id="container">
+				<div id="option_body"># of Employees:</div><br>
+				<input type=text name="Employees" placeholder="Optional">
+			</div>
+
+			<div id="container">
+				<div id="option_body">Wages (Annual Total):</div><br>
+				<input type=text name="AnnualWages" placeholder="Optional">
+			</div>
+
+			</div>
+			<br>
+
+			<div id="container">
+				<input type="submit" value="Run Report">
+			</div>
+		</form>
 	</body>
 </html>
