@@ -11,4 +11,6 @@ urlpatterns = [
     
     url(r'^',include('compactapp.urls')),
     url(r'^admin/', include(admin.site.urls)),
-]
+    url(r'^results/', 'compactapp.views.results', name='results'),
+    url(r'^error_page/', 'compactapp.views.error_page', name='error_page')
+    ]

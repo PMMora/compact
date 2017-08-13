@@ -13,11 +13,11 @@
 		<div id="header-menu">About | User Manual | FAQ</div>
 		<br>
 		<br>
-		<div id="option_title">Simple Analysis</div>
-		<div id="option_subtitle">High-level view of industry-wide impact.</div>
+		<div id="option-title">Simple Analysis</div>
+		<div id="option-subtitle">High-level view of industry-wide impact.</div>
 		<form name = "Simple Analysis" action="Placeholder for submitting to model" method ="post">
 			<div id="container">
-				<div id="option_body">Industry:</div><br>
+				<div id="option-body">Industry:</div><br>
   					<select id="Industries" title="Industries" required>
   						{% for industry in industry %}
     					<option value="1">{{ industry.name }}</option>
@@ -25,7 +25,7 @@
 					</select>
 			</div>
 			<div id="container">
-				<div id="option_body">State:</div><br>
+				<div id="option-body">State:</div><br>
 					<select id="States" title="States" required>
 						{% for area in area %}
 						<option value="{{area.fips}}"> {{area.name}} </option>
@@ -37,16 +37,16 @@
 				<input type="submit" value="Run Report">
 			</div>
 		</form>
-		<div id="option_title">Advanced Analysis</div>
-		<div id="option_subtitle">Filter by 6-digit NAICS code and custom business details.</div>
+		<div id="option-title">Advanced Analysis</div>
+		<div id="option-subtitle">Filter by 6-digit NAICS code and custom business details.</div>
 		<form name = "Advanced Analysis" action="Placeholder for submitting to model" method ="post">
 			<div id="container">
-				<div id="option_body">NAICS Code:</div><br>
+				<div id="option-body">NAICS Code:</div><br>
 				<input type=text name="NAICSCode" placeholder="Required" required>
 			</div>
 
 			<div id="container">
-				<div id="option_body">State:</div><br>
+				<div id="option-body">State:</div><br>
 					<select id = "State" title = "State" value="Required" required>
 						{% for area in area.objects.all %}
 						<option value=1> {{area}} </option>
@@ -55,17 +55,17 @@
 			</div>
 
 			<div id="container">
-				<div id="option_body">Revenue:</div><br>
+				<div id="option-body">Revenue:</div><br>
 				<input type=text name="Revenue" placeholder="Optional">
 			</div>
 
 			<div id="container">
-				<div id="option_body"># of Employees:</div><br>
+				<div id="option-body"># of Employees:</div><br>
 				<input type=text name="Employees" placeholder="Optional">
 			</div>
 
 			<div id="container">
-				<div id="option_body">Wages (Annual Total):</div><br>
+				<div id="option-body">Wages (Annual Total):</div><br>
 				<input type=text name="AnnualWages" placeholder="Optional">
 			</div>
 
@@ -75,8 +75,8 @@
 				<input type="submit" value="Run Report">
 			</div>
 
-			<div id="option_title">Additional options</div>
-			<div id="option_subtitle">(Only applicable to Advanced Analysis)</div>
+			<div id="option-title">Additional options</div>
+			<div id="option-subtitle">(Only applicable to Advanced Analysis)</div>
 
 			<div id="container">
 				 <input type=checkbox name="EmployeeBasedLC">
@@ -89,6 +89,9 @@
 
 
 		</form>
+		<br>
+		<br>
+		<br>
 	</div>
 	</body>
 </html>

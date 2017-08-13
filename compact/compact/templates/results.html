@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Compact Input/Output Report Generator</title>
+	</head>
+
+	<link type="text/css" rel="stylesheet" href="{% static 'styles.css' %}">
+	<body>
+		<div id="page-border">
+			<header>Compact Input/Output Report Generator</header>
+			<div id="header-menu">About | User Manual | FAQ</div>
+			<br>
+			<div id="header-menu">Download Report as CSV</div>
+			
+			<div id="container">
+			<div id="chart-title">Your report was successfully generated.<br><br>Industry: (selected option)<br>State: (selected option)</div>
+			<br>
+			</div>
+
+			<div id="container">
+				<br>
+				<div id="chart-title">Raw Input-Output Table</div>
+			</div>
+		</div>
+	</body>
+</html>
+

@@ -6,11 +6,14 @@ from compactapp.models import Area
 
 # Create your views here.
 def home_screen(request):
+    options = []
     template = loader.get_template('base.html')
     return HttpResponse(template.render())
 
-def results_screen(request):
-    pass
+def results(request):
+    template = loader.get_template('results.html')
+    return HttpResponse(template.render())
 
-def error_screen(request):
-    pass
+def error_page(request):
+    template = loader.get_template('error_page.html')
+    return HttpResponse(template.render())
