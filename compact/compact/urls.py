@@ -11,6 +11,10 @@ urlpatterns = [
     
     url(r'^',include('compactapp.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^home/', 'compactapp.views.home', name='home'),
     url(r'^results/', 'compactapp.views.results', name='results'),
-    url(r'^error_page/', 'compactapp.views.error_page', name='error_page')
+    url(r'^error_page/', 'compactapp.views.error_page', name='error_page'),
+    url(r'^about/', 'compactapp.views.about', name='about'),
+    url(r'^user_manual/', 'compactapp.views.user_manual', name='user_manual'),
+    url(r'^faq/', 'compactapp.views.faq', name='faq')
     ]

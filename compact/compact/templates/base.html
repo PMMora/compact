@@ -10,25 +10,25 @@
 	<body>
 	<div id="page-border">
 		<header>Compact Input/Output Report Generator</header>
-		<div id="header-menu">About | User Manual | FAQ</div>
+		<div id="header-menu"><a href="/">Home</a> | <a href="/about">About</a> | <a href="/user_manual">User Manual</a> | <a href="/faq">FAQ</a></div>
 		<br>
 		<br>
 		<div id="option-title">Simple Analysis</div>
 		<div id="option-subtitle">High-level view of industry-wide impact.</div>
-		<form name = "Simple Analysis" action="Placeholder for submitting to model" method ="post">
+		<form name = "Simple Analysis" action="results" method ="get">
 			<div id="container">
 				<div id="option-body">Industry:</div><br>
   					<select id="Industries" title="Industries" required>
-  						{% for industry in industry %}
-    					<option value="1">{{ industry.name }}</option>
+  						{% for industry in industries %}
+    						<option value={{industry}}>{{ industry }}</option>
     					{% endfor %}
 					</select>
 			</div>
 			<div id="container">
 				<div id="option-body">State:</div><br>
 					<select id="States" title="States" required>
-						{% for area in area %}
-						<option value="{{area.fips}}"> {{area.name}} </option>
+						{% for area in areas %}
+							<option value={{area.name}}>{{ area.name }}</option>
 						{% endfor %}
 					</select>
 			</div>
@@ -39,7 +39,7 @@
 		</form>
 		<div id="option-title">Advanced Analysis</div>
 		<div id="option-subtitle">Filter by 6-digit NAICS code and custom business details.</div>
-		<form name = "Advanced Analysis" action="Placeholder for submitting to model" method ="post">
+		<form name = "Advanced Analysis" action="results" method ="get">
 			<div id="container">
 				<div id="option-body">NAICS Code:</div><br>
 				<input type=text name="NAICSCode" placeholder="Required" required>
@@ -47,9 +47,9 @@
 
 			<div id="container">
 				<div id="option-body">State:</div><br>
-					<select id = "State" title = "State" value="Required" required>
-						{% for area in area.objects.all %}
-						<option value=1> {{area}} </option>
+					<select id="States" title="States" required>
+						{% for area in areas %}
+							<option value={{area.name}}>{{ area.name }}</option>
 						{% endfor %}
 					</select>
 			</div>
