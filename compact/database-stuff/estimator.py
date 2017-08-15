@@ -16,15 +16,15 @@ def get_non_disclosed_rows(conn):
 
 def get_totals_of_non_disclosed_naics(conn, gen_naics, year, area):
     sql = '''SELECT fips_id, naics_id, establishments, employees, wages FROM yield
-            WHERE naics_id = {} AND year = {} AND fips_id = {} and own_code ='5' '''.format(gen_naics, year, area)
+            WHERE naics_id = '{}' AND year = '{}' AND fips_id = '{}' and own_code ='5' '''.format(gen_naics, year, area)
     cur = conn.cursor()
     cur.execute(sql)
-    rows = cur.fetchall()
+    rows = cur.fetchone()
     return rows
 
 def get_totals_of_disclosed_rows(conn, gen_naics, year, area):
-    sql = '''SELECT fips_id, naics_id, establishments, employees, wages FROM yield
-                WHERE naics_id LIKE '{}_' and year = {} and fips_id = {} and own_code='5' '''.format(gen_naics, year, area)
+    sql = '''SELECT fips_id, naics_id, establishments, employees, wages, disclosure_code FROM yield
+                WHERE naics_id LIKE '{}_' and year = {} and fips_id = '{}' and own_code='5' '''.format(gen_naics, year, area)
     cur = conn.cursor()
     cur.execute(sql)
     rows = cur.fetchall()
@@ -37,18 +37,20 @@ def update_non_disclosed_row(conn, naics, year, area, wages, employees):
     cur = conn.cursor()
     cur.execute(sql,(wages, employees, naics, year, area))
 
+
 def get_us_totals(conn, naics, year):
     sql = '''SELECT fips_id, naics_id, establishments, employees, wages FROM yield
             WHERE naics_id = {} and year = {} and fips_id = 'US' and own_code = '5' '''.format(naics, year)
     cur = conn.cursor()
     cur.execute(sql)
-    rows = cur.fetchall()
+    rows = cur.fetchone()
     return rows
 
 suppressed = get_non_disclosed_rows(conn)
 
 with conn:
     for row in suppressed:
+
         naics = row[1]
         gen_naics = row[1][:-1]
         year = row[2]
@@ -56,7 +58,7 @@ with conn:
         
         total_employees = 0
         total_wages = 0
-
+   
         disc_employees = 0
         disc_wages = 0
 
@@ -65,73 +67,48 @@ with conn:
 
         undisclosed_rows = 0
 
+        if int(gen_naics) in [31,32,33]:
+            gen_naics = '31-33'
+        elif int(gen_naics) in [44,45]:
+            gen_naics = '44-45'
+        elif int(gen_naics) in [48,49]:
+            gen_naics = '48-49'
+
         totals = get_totals_of_non_disclosed_naics(conn, gen_naics, year, area)
 
-        for line in totals:
-            print(line)
 
-        for line in totals:
-            if line[3]==0 and line[4] == 0 and row[5]==0 and row[6]==0:
-                #print('HIGHER LEVEL NAICS')
-                #print("Row to be estimated",row)
-                #print('Suppressed higher level naic',line)
-                us_totals = get_us_totals(conn, gen_naics, year)
+        if totals[3]==0 and totals[4]==0:
+            us_totals = get_us_totals(conn, gen_naics, year)
+            estab_ratio = float(row[3]/us_totals[2])      
+            est_employees = us_totals[3]*estab_ratio
+            est_wages = us_totals[4]*estab_ratio
 
-                for us_row in us_totals:
-                 #   print('US total for high level naic',us_row)
-                    estab_ratio = float(line[2]/us_row[2])
-                    
-                    total_employees = us_row[3]*estab_ratio
-                    total_wages = us_row[4]*estab_ratio
+        else:
+            total_employees = totals[3]
+            total_wages = totals[4]
 
-                  #  print('estimated total employees + wages in area naic',[total_employees,total_wages])
+            if isinstance(gen_naics, str):
+                gen_naics = row[1][:-1]
 
-                total_disclosed = get_totals_of_disclosed_rows(conn, gen_naics, year, area)
+            total_disclosed = get_totals_of_disclosed_rows(conn, gen_naics, year, area)
+            
+            for disclosed_row in total_disclosed:
 
-                for disclosed_row in total_disclosed:
-                    if disclosed_row[3] == 0 and disclosed_row[4] == 0:
-                        undisclosed_rows +=1
-
-                    employees = disclosed_row[3]
-                    wages = disclosed_row[4]
-
-                    total_employees -= int(employees)
-                    total_wages -= int(wages)
-
-                est_employees = round((total_employees/undisclosed_rows))
-                est_wages = round((total_wages/undisclosed_rows))
-
-                #print([est_employees, est_wages])
-            else:
-                #print('LOWER LEVEL NAICS')
-                #print(row)
-                total_employees = int(line[3])
-                total_wages = int(line[4])
-                total_disclosed = get_totals_of_disclosed_rows(conn, gen_naics, year, area)
-                #print('total',total_employees, total_wages)
+                if disclosed_row[5] == 'N':
+                    undisclosed_rows +=1
 
 
-                for disclosed_row in total_disclosed:
-                    if disclosed_row[3] == 0 and disclosed_row[4] ==0:
-                        undisclosed_rows += 1
+                employees = disclosed_row[3]
+                wages = disclosed_row[4]
 
-                    employees = disclosed_row[3]
-                    wages = disclosed_row[4]
-
-                    disc_employees += disclosed_row[3]
-                    disc_wages += disclosed_row[4]
+                disc_employees += employees
+                disc_wages += wages
 
 
-                    total_employees -= int(employees)
-                    total_wages -= int(wages)
+                total_employees -= int(employees)
+                total_wages -= int(wages)
 
-                est_employees = round(total_employees/undisclosed_rows)
-                est_wages = round(total_wages/undisclosed_rows)
-                
-       # print('disclosed',disc_employees, disc_wages)
-       # print('new total',total_employees, total_wages)
-       # print('row count', undisclosed_rows)
-       # print('estimate',est_employees, est_wages)
-                #print([naics, year, area, est_wages, est_employees])
-        #print([naics, year, area, est_employees, est_wages])
-        #update_non_disclosed_row(conn, str(naics), str(year), str(area), str(est_wages), str(est_employees))
+            est_employees = round(total_employees/undisclosed_rows)
+            est_wages = round(total_wages/undisclosed_rows)
+
+        update_non_disclosed_row(conn, naics, year, area, est_wages, est_employees)
