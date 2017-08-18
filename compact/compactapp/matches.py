@@ -99,7 +99,7 @@ naicsmatch = [
             ]
 
 fipsmatch = [
-    {'state': 'US', 'fips': '00'},
+    {'state': 'US', 'fips': 'US'},
     {'state': 'Alabama', 'fips': '01'},
     {'state': 'Alaska', 'fips': '02'},
     {'state': 'Arizona', 'fips': '04'},
@@ -154,3 +154,4 @@ fipsmatch = [
     {'state': 'Wisconsin', 'fips': '55'},
     {'state': 'Wyoming', 'fips': '56'}
 ]
+
