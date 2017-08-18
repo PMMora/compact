@@ -14,110 +14,33 @@ from matrixtools import blank_matrix, \
 from numpy.linalg import inv, det
 import numpy
 
+import os
+import sqlite3
+
+from matches import naicsmatch, fipsmatch
+
+# Query function copied from queries.py until directory is fixed
+def select_column_yield(conn, column_name, fips, own, naics, year):
+    '''return column from yield for a given area, industry, and year
+        :param: fips_id is the 2 digit fips id
+        :param: naics_id is the 3 or 6 digit naics id
+        :param: year... well you know the year
+    '''
+    sql = '''SELECT {} FROM yield
+                WHERE fips_id = '{}'
+                    AND own_code = '{}'
+                    AND naics_id = '{}'
+                    AND year = '{}' '''.format(column_name,fips,own,naics,year)
+    cur = conn.cursor()
+    cur.execute(sql)
+    row = cur.fetchone()
+    return row
 
 
 # This matches any given NAICS to its IO sector.
 # If a user enters an invalid NAICS, raise a custom ValueError
 def match_naics_to_IO(NAICS=111):
-    match = [
-            {'NAICS': 111, 'IO': 1, 'desc': 'Farms'}, 
-            {'NAICS': 112, 'IO': 1, 'desc': 'Farms'}, 
-            {'NAICS': 113, 'IO': 2, 'desc': 'Forestry, fishing, and related activities'}, 
-            {'NAICS': 114, 'IO': 2, 'desc': 'Forestry, fishing, and related activities'}, 
-            {'NAICS': 115, 'IO': 2, 'desc': 'Forestry, fishing, and related activities'}, 
-            {'NAICS': 211, 'IO': 3, 'desc': 'Oil and gas extraction'}, 
-            {'NAICS': 212, 'IO': 4, 'desc': 'Mining, except oil and gas'}, 
-            {'NAICS': 213, 'IO': 5, 'desc': 'Support activities for mining'}, 
-            {'NAICS': 221, 'IO': 6, 'desc': 'Utilities'}, 
-            {'NAICS': 230, 'IO': 7, 'desc': 'Construction'}, 
-            {'NAICS': 311, 'IO': 19, 'desc': 'Food and beverage and tobacco products'}, 
-            {'NAICS': 312, 'IO': 19, 'desc': 'Food and beverage and tobacco products'}, 
-            {'NAICS': 313, 'IO': 20, 'desc': 'Textile mills and textile product mills'}, 
-            {'NAICS': 314, 'IO': 20, 'desc': 'Textile mills and textile product mills'}, 
-            {'NAICS': 315, 'IO': 21, 'desc': 'Apparel and leather and allied products'}, 
-            {'NAICS': 316, 'IO': 21, 'desc': 'Apparel and leather and allied products'}, 
-            {'NAICS': 321, 'IO': 8, 'desc': 'Wood products'}, 
-            {'NAICS': 322, 'IO': 22, 'desc': 'Paper products'}, 
-            {'NAICS': 323, 'IO': 23, 'desc': 'Printing and related support activities'}, 
-            {'NAICS': 324, 'IO': 24, 'desc': 'Petroleum and coal products'}, 
-            {'NAICS': 325, 'IO': 25, 'desc': 'Chemical products'}, 
-            {'NAICS': 326, 'IO': 26, 'desc': 'Plastics and rubber products'}, 
-            {'NAICS': 327, 'IO': 9, 'desc': 'Nonmetallic mineral products'}, 
-            {'NAICS': 331, 'IO': 10, 'desc': 'Primary metals'}, 
-            {'NAICS': 332, 'IO': 11, 'desc': 'Fabricated metal products'}, 
-            {'NAICS': 333, 'IO': 12, 'desc': 'Machinery'}, 
-            {'NAICS': 334, 'IO': 13, 'desc': 'Computer and electronic products'}, 
-            {'NAICS': 335, 'IO': 14, 'desc': 'Electrical equipment, appliances, and components'}, 
-            {'NAICS': 3361, 'IO': 15, 'desc': 'Motor vehicles, bodies and trailers, and parts'}, 
-            {'NAICS': 3362, 'IO': 15, 'desc': 'Motor vehicles, bodies and trailers, and parts'}, 
-            {'NAICS': 3363, 'IO': 15, 'desc': 'Motor vehicles, bodies and trailers, and parts'}, 
-            {'NAICS': 3364, 'IO': 16, 'desc': 'Other transportation equipment'}, 
-            {'NAICS': 3365, 'IO': 16, 'desc': 'Other transportation equipment'}, 
-            {'NAICS': 3366, 'IO': 16, 'desc': 'Other transportation equipment'}, 
-            {'NAICS': 3369, 'IO': 16, 'desc': 'Other transportation equipment'}, 
-            {'NAICS': 337, 'IO': 17, 'desc': 'Furniture and related products'}, 
-            {'NAICS': 339, 'IO': 18, 'desc': 'Miscellaneous manufacturing'}, 
-            {'NAICS': 420, 'IO': 27, 'desc': 'Wholesale trade'}, 
-            {'NAICS': 441, 'IO': 28, 'desc': 'Motor vehicle and parts dealers'}, 
-            {'NAICS': 442, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 443, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 444, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 445, 'IO': 29, 'desc': 'Food and beverage stores'}, 
-            {'NAICS': 446, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 447, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 448, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 451, 'IO': 31, 'desc': 'Other retail'}, 
-            {'NAICS': 452, 'IO': 30, 'desc': 'General merchandise stores'}, 
-            {'NAICS': 481, 'IO': 32, 'desc': 'Air transportation'}, 
-            {'NAICS': 482, 'IO': 33, 'desc': 'Rail transportation'}, 
-            {'NAICS': 483, 'IO': 34, 'desc': 'Water transportation'}, 
-            {'NAICS': 484, 'IO': 35, 'desc': 'Truck transportation'}, 
-            {'NAICS': 485, 'IO': 36, 'desc': 'Transit and ground passenger transportation'}, 
-            {'NAICS': 486, 'IO': 37, 'desc': 'Pipeline transportation'}, 
-            {'NAICS': 487, 'IO': 38, 'desc': 'Other transportation and support activities'}, 
-            {'NAICS': 488, 'IO': 38, 'desc': 'Other transportation and support activities'}, 
-            {'NAICS': 492, 'IO': 38, 'desc': 'Other transportation and support activities'}, 
-            {'NAICS': 493, 'IO': 39, 'desc': 'Warehousing and storage'}, 
-            {'NAICS': 511, 'IO': 40, 'desc': 'Publishing industries, except internet (includes software)'}, 
-            {'NAICS': 512, 'IO': 41, 'desc': 'Motion picture and sound recording industries'}, 
-            {'NAICS': 515, 'IO': 42, 'desc': 'Broadcasting and telecommunications'}, 
-            {'NAICS': 517, 'IO': 42, 'desc': 'Broadcasting and telecommunications'}, 
-            {'NAICS': 518, 'IO': 43, 'desc': 'Data processing, internet publishing, and other information services'}, 
-            {'NAICS': 519, 'IO': 43, 'desc': 'Data processing, internet publishing, and other information services'}, 
-            {'NAICS': 521, 'IO': 44, 'desc': 'Federal Reserve banks, credit intermediation, and related activities'}, 
-            {'NAICS': 522, 'IO': 44, 'desc': 'Federal Reserve banks, credit intermediation, and related activities'}, 
-            {'NAICS': 523, 'IO': 45, 'desc': 'Securities, commodity contracts, and investments'}, 
-            {'NAICS': 524, 'IO': 46, 'desc': 'Insurance carriers and related activities'}, 
-            {'NAICS': 525, 'IO': 47, 'desc': 'Funds, trusts, and other financial vehicles'}, 
-            {'NAICS': 5311, 'IO': 48, 'desc': 'Housing'}, 
-            {'NAICS': 5312, 'IO': 49, 'desc': 'Other real estate'}, 
-            {'NAICS': 5313, 'IO': 49, 'desc': 'Other real estate'}, 
-            {'NAICS': 532, 'IO': 50, 'desc': 'Rental and leasing services and lessors of intangible assets'}, 
-            {'NAICS': 533, 'IO': 50, 'desc': 'Rental and leasing services and lessors of intangible assets'}, 
-            {'NAICS': 5411, 'IO': 51, 'desc': 'Legal services'}, 
-            {'NAICS': 5412, 'IO': 53, 'desc': 'Miscellaneous professional, scientific, and technical services'}, 
-            {'NAICS': 5413, 'IO': 53, 'desc': 'Miscellaneous professional, scientific, and technical services'}, 
-            {'NAICS': 5414, 'IO': 53, 'desc': 'Miscellaneous professional, scientific, and technical services'}, 
-            {'NAICS': 5415, 'IO': 52, 'desc': 'Computer systems design and related services'}, 
-            {'NAICS': 541, 'IO': 53, 'desc': 'Miscellaneous professional, scientific, and technical services'}, 
-            {'NAICS': 550, 'IO': 54, 'desc': 'Management of companies and enterprises'}, 
-            {'NAICS': 561, 'IO': 55, 'desc': 'Administrative and support services'}, 
-            {'NAICS': 562, 'IO': 56, 'desc': 'Waste management and remediation services'}, 
-            {'NAICS': 611, 'IO': 57, 'desc': 'Educational services'}, 
-            {'NAICS': 621, 'IO': 58, 'desc': 'Ambulatory health care services'}, 
-            {'NAICS': 622, 'IO': 59, 'desc': 'Hospitals'}, 
-            {'NAICS': 623, 'IO': 60, 'desc': 'Nursing and residential care facilities'}, 
-            {'NAICS': 624, 'IO': 61, 'desc': 'Social assistance'}, 
-            {'NAICS': 711, 'IO': 62, 'desc': 'Performing arts, spectator sports, museums, and related activities'}, 
-            {'NAICS': 712, 'IO': 62, 'desc': 'Performing arts, spectator sports, museums, and related activities'}, 
-            {'NAICS': 713, 'IO': 63, 'desc': 'Amusements, gambling, and recreation industries'}, 
-            {'NAICS': 721, 'IO': 64, 'desc': 'Accommodation'}, 
-            {'NAICS': 722, 'IO': 65, 'desc': 'Food services and drinking places'}, 
-            {'NAICS': 811, 'IO': 66, 'desc': 'Other services, except government'}, 
-            {'NAICS': 812, 'IO': 66, 'desc': 'Other services, except government'}, 
-            {'NAICS': 813, 'IO': 66, 'desc': 'Other services, except government'}, 
-            {'NAICS': 814, 'IO': 66, 'desc': 'Other services, except government'}
-            ]
+    match = naicsmatch
     def loop(NAICS):
         try:
             IO = [pair['IO'] for pair in match if pair['NAICS'] == NAICS][0]
@@ -132,21 +55,105 @@ def match_naics_to_IO(NAICS=111):
     loop(NAICS)
 
 
+#This matches a state to a fips:
+def fips_match(state):
+    for match in fipsmatch:
+        if match['state'] == state:
+            result = match['fips']
+        else:
+            pass
+    return result
+
+
 # Return a list of values 0 to 1 for each IO sector (1 through 66)
-# to do:
-#   implement LQ determination, or pull from database
-#   let user choose wage or emp based LQs
-def determine_LQs(geo='US', year=2015, lq_type='wage'):
-    if lq_type=='wage':
-        lqs = [1 for i in range(67)]
-    elif lq_type=='employment':
-        lqs = [1 for i in range(67)]
-    return lqs
+# TODO:
+#   check failed NAICS...
+def determine_LQs(geo='Alabama', year=2015, lq_type='wages'):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    database = os.path.join(os.path.dirname(base_dir), 'db.sqlite3')
+    conn = sqlite3.connect(database)
+
+    # Get the fips for our state for the query
+    fips = fips_match(geo)
+
+    # Create empty lists to add emp and wages to
+    local = [{'IO': i+1, 'employees': 0, 'wages': 0} for i in range(0, 66)]
+    us = [{'IO': i+1, 'employees': 0, 'wages': 0} for i in range(0, 66)]
+
+    localerrorlist = []
+    userrorlist = []
+
+    for io in local:
+        for dic in naicsmatch:
+            naics = dic['NAICS']
+            if dic['IO'] == io['IO']:
+                try:
+                    io['employees'] += select_column_yield(conn, 'employees', fips, 5, naics, year)[0]
+                    io['wages'] += select_column_yield(conn, 'wages', fips, 5, naics, year)[0]
+                except:
+                    localerrorlist.append(naics)
+
+    for io in us:
+        for dic in naicsmatch:
+            naics = dic['NAICS']
+            if dic['IO'] == io['IO']:
+                for i in fipsmatch:
+                    try:
+                        io['employees'] += select_column_yield(conn, 'employees', i['fips'], 5, naics, year)[0]
+                        io['wages'] += select_column_yield(conn, 'wages', i['fips'], 5, naics, year)[0]
+                    except:
+                        userrorlist.append(naics)
+
+    localtotalemp = 0
+    localtotalwages = 0
+    ustotalemp = 0
+    ustotalwages = 0
+
+    for dict in local:
+        localtotalemp += dict['employees']
+        localtotalwages += dict['wages']
+    for dict in us:
+        ustotalemp += dict['employees']
+        ustotalwages += dict['wages']
+
+    lqs = [0 for i in range(0,66)]
+
+    if lq_type == 'employees':
+        localdenominator = localtotalemp
+        usdenominator = ustotalemp
+    else:
+        localdenominator = localtotalwages
+        usdenominator = ustotalwages
+
+    for dict in local:
+        lqs[dict['IO']-1] = dict[lq_type] / localdenominator
+
+    for dict in us:
+        try:
+            lqs[dict['IO']-1] /= dict[lq_type] / usdenominator
+        except:
+            pass
+    lqs.append(1)
+
+    # If an lq is greater than 1, correct it to 1
+    # Make sure no lqs are less than 0
+    for i in range(len(lqs)):
+        if lqs[i] > 1:
+            lqs[i] = 1
+        elif lqs[i] < 0:
+            lqs[i] = 0
+        else:
+            pass
+    print(lqs)
+    return [lqs, us, local]
 
 
 # Return a list of lists of direct requirements for the given year, geo, and type
 def determine_direct_requirements(geo='US', year=2015, lq_type='wage'):
-    lqs = determine_LQs(geo, year, lq_type)
+    lqoutput = determine_LQs(geo, year, lq_type)
+    lqs = lqoutput[0]
+    us = lqoutput[1]
+    local = lqoutput[2]
     raw_direct_requirements = [
         [71080000000, 25769000000, 0, 2627000000, 0, 4860000000, 2842000000, 784000000, 20000000, 142000000, 2845000000,
          3442000000, 21000000, 469000000, 1095000000, 0, 2000000, 316000000, 31889000000, 232000000, 71000000,
@@ -583,10 +590,10 @@ def determine_direct_requirements(geo='US', year=2015, lq_type='wage'):
 
     ]
     direct_requirements = multiply_short(list_to_sublists(lqs, 67), raw_direct_requirements)
-    return direct_requirements
+    return [direct_requirements, us, local]
 
 
-# to do:
+# TODO:
 #   first round purchases
 def impact(direct_requirements, impact_input):
     industry_totals = [
@@ -654,6 +661,9 @@ def impact(direct_requirements, impact_input):
         169331000000, 147612000000, 243394000000, 723476000000, 663262000000,
         12283684000000
     ]
+    direct_requirements = direct_requirements[0]
+    us = direct_requirements[1]
+    local = direct_requirements[2]
     type_1_A = subtract_short(identity_matrix(67, 67), divide_short(direct_requirements, list_to_sublists(industry_totals, 67)))
     type_1_B = subtract_short(identity_matrix(67, 67), divide_short(direct_requirements, list_to_sublists(industry_totals, 67)))
     del type_1_B[:1]
@@ -677,7 +687,7 @@ def impact(direct_requirements, impact_input):
 
 
 # Takes a complex user input and translates it to run through the impact model
-def complex_impact(user_input=['US', 2015, [111, 0, 0, 0], 'wage']):
+def complex_impact(user_input=['Alabama', 2015, [111, 0, 0, 0], 'wages']):
     IO = match_naics_to_IO(user_input[2][0])
     final_user_input = [IO, [user_input[1], user_input[2], user_input[3]]]
     direct_requirements = determine_direct_requirements(user_input[0], user_input[1], user_input[3])
@@ -685,7 +695,7 @@ def complex_impact(user_input=['US', 2015, [111, 0, 0, 0], 'wage']):
 
 
 # Takes a simple input (geo, year, sector) and translates it to run through the impact model
-# To do:
+# TODO:
 #   based on emp, wages for selected sector, estimate revenue
 def simple_impact(user_input=['US', 2015, 1]):
     # pull emp, wages for that sector
