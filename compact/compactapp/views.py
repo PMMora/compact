@@ -4,26 +4,25 @@ from django.template import Context, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from compactapp.models import Area
 
+import xlrd
+import itertools
+
 # Create your views here.
 def home(request):
     template = loader.get_template('base.html')
     areas = Area.objects.values('name')
-    industries = [
-    "Production", 
-    "Utilities", 
-    "Construction", 
-    "Nondurables Manufacturing", 
-    "Durables Manufacturing", 
-    "Wholesale and Retail", 
-    "Transporation", 
-    "Info & Telecom", 
-    "Finance, Insurance, Rental, and Real Estate",
-    "Professional Services",
-    "Health Services", 
-    "Other Services", 
-    "Food Services"
-    ]
     area_list = list(entry['name'] for entry in areas)
+
+    industry_file_location = "FinalNAICStoIOMatch.xlsx"
+    workbook = xlrd.open_workbook(industry_file_location)
+    sheet = workbook.sheet_by_name('NAICS to Sector')
+    sector_ID = list(item for item in sheet.col_values(0))
+    sector_description = list(item for item in sheet.col_values(1))
+    del sector_description[0]
+    sector_NAICS = list(item for item in sheet.col_values(3))
+    del sector_NAICS[0]
+    del sector_NAICS[-1]
+    industries = ["{} - NAICS Code: {}".format(desc, int(NAICS)) for desc, NAICS in zip(sector_description, sector_NAICS)]
 
     context = {'areas': areas, 'industries': industries}
 

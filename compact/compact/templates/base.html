@@ -30,6 +30,7 @@
 						{% for area in areas %}
 							<option value={{area.name}}>{{ area.name }}</option>
 						{% endfor %}
+							<option selected="selected" value="US">US</option>
 					</select>
 			</div>
 			<br>
@@ -42,7 +43,7 @@
 		<form name = "Advanced Analysis" action="results" method ="get">
 			<div id="container">
 				<div id="option-body">NAICS Code:</div><br>
-				<input type=text name="NAICSCode" placeholder="Required" required>
+				<input type=text name="NAICSCode" placeholder="Required" value=111 required>
 			</div>
 
 			<div id="container">
@@ -56,17 +57,17 @@
 
 			<div id="container">
 				<div id="option-body">Revenue:</div><br>
-				<input type=text name="Revenue" placeholder="Optional">
+				<input type=text name="Revenue" placeholder="Optional" value=0>
 			</div>
 
 			<div id="container">
 				<div id="option-body"># of Employees:</div><br>
-				<input type=text name="Employees" placeholder="Optional">
+				<input type=text name="Employees" placeholder="Optional" value=0>
 			</div>
 
 			<div id="container">
 				<div id="option-body">Wages (Annual Total):</div><br>
-				<input type=text name="AnnualWages" placeholder="Optional">
+				<input type=text name="AnnualWages" placeholder="Optional" value=0>
 			</div>
 
 			<br>
