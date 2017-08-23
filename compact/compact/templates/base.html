@@ -18,20 +18,11 @@
 		<form name = "Simple Analysis" action="results" method ="get">
 			<div id="container">
 				<div id="option-body">Industry:</div><br>
-  					<select id="Industries" title="Industries" required>
-  						{% for industry in industries %}
-    						<option value={{industry}}>{{ industry }}</option>
-    					{% endfor %}
-					</select>
+  					{{ simple_analysis.industry }}
 			</div>
 			<div id="container">
-				<div id="option-body">State:</div><br>
-					<select id="States" title="States" required>
-						{% for area in areas %}
-							<option value={{area.name}}>{{ area.name }}</option>
-						{% endfor %}
-							<option selected="selected" value="US">US</option>
-					</select>
+				<div id="option-body">Area:</div><br>
+						{{ simple_analysis.state }}
 			</div>
 			<br>
 			<div id="container">
@@ -40,34 +31,30 @@
 		</form>
 		<div id="option-title">Advanced Analysis</div>
 		<div id="option-subtitle">Filter by 6-digit NAICS code and custom business details.</div>
-		<form name = "Advanced Analysis" action="results" method ="get">
+		<form name = "Advanced Analysis" action="results" method ="post">
 			<div id="container">
 				<div id="option-body">NAICS Code:</div><br>
-				<input type=text name="NAICSCode" placeholder="Required" value=111 required>
+				{{ advanced_analysis.naics }}
 			</div>
 
 			<div id="container">
-				<div id="option-body">State:</div><br>
-					<select id="States" title="States" required>
-						{% for area in areas %}
-							<option value={{area.name}}>{{ area.name }}</option>
-						{% endfor %}
-					</select>
+				<div id="option-body">Area:</div><br>
+					{{ advanced_analysis.state }}
 			</div>
 
 			<div id="container">
 				<div id="option-body">Revenue:</div><br>
-				<input type=text name="Revenue" placeholder="Optional" value=0>
+				{{ advanced_analysis.revenue }}
 			</div>
 
 			<div id="container">
 				<div id="option-body"># of Employees:</div><br>
-				<input type=text name="Employees" placeholder="Optional" value=0>
+				{{ advanced_analysis.employees }}
 			</div>
 
 			<div id="container">
 				<div id="option-body">Wages (Annual Total):</div><br>
-				<input type=text name="AnnualWages" placeholder="Optional" value=0>
+				{{ advanced_analysis.wages_annual }}
 			</div>
 
 			<br>
@@ -80,11 +67,11 @@
 			<div id="option-subtitle">(Only applicable to Advanced Analysis)</div>
 
 			<div id="container">
-				 <input type=checkbox name="EmployeeBasedLC">
+				 {{ advanced_analysis.emp_based_lc }}
 				 <label for="EmployeeBasedLC">Use Employee-Based Location Quotients</label>
 			</div>
 			<div id="container">
-				 <input type=checkbox name"WageBasedLC">
+				 {{ advanced_analysis.wage_based_lc }}
 				 <label for="WageBasedLC">Use Wage-Based Location Quotients</label>
 			</div>
 
