@@ -22,13 +22,14 @@ class SimpleAnalysis(forms.Form):
     sector_NAICS = list(item for item in sheet.col_values(3))
     #Gets all sector IDs, NAICS, and industry names from the excel sheet provided by Eric.
 
-    industries = ["NAICS Code: {} - {}".format(int(NAICS), desc) for NAICS, desc in zip(sector_NAICS, sector_description)]
+    industries = ["Sector ID: {} | {} | NAICS Code {}".format(int(ID), desc, int(NAICS)) for ID, desc, NAICS in zip(sector_ID, sector_description, sector_NAICS)]
     industries = zip(sector_ID, industries)
     #Formats the menu item choices for Industries and zips them into a list of tuples.
 
 
     industry = forms.ChoiceField(choices=industries)
-    state = forms.ChoiceField(choices=area_list)
+    area = forms.ChoiceField(choices=area_list)
+    year = forms.ChoiceField(choices=[(1, 2015)])
 
 class AdvancedAnalysis(forms.Form):
 
@@ -40,7 +41,8 @@ class AdvancedAnalysis(forms.Form):
     # Extremely unpythonic repetition of above code, however, Flask will not render the state list if I attempt to reuse the same code, because reasons
 
     naics = forms.CharField(min_length=3, max_length=6, initial='111')
-    state = forms.ChoiceField(choices=area_list)
+    area = forms.ChoiceField(choices=area_list)
+    year = forms.ChoiceField(choices=[(1, 2015)])
     revenue = forms.IntegerField(min_value=0, max_value=999999999999, initial=0)
     employees = forms.IntegerField(min_value=0, max_value=999999, initial=0)
     wages_annual = forms.IntegerField(min_value=0, max_value=999999999999, initial=0)

@@ -1,4 +1,7 @@
 {% load staticfiles %}
+
+{% csrf_token %}
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,16 +13,22 @@
 		<div id="page-border">
 			<header>Compact Input/Output Report Generator</header>
 			<div id="header-menu"><a href="/">Home</a> | <a href="/about">About</a> | <a href="/user_manual">User Manual</a> | <a href="/faq">FAQ</a></div>
-			<br>
-			<br>
-			<br>
-			<div id="container">
-			<div id="chart-title">There was an error processing your request. Please return to the <a href="/">homepage</a> and try again.</div>
-			<br>
-			<br>
-			<br>
-			</div>
+			<div id="option-title">Raw Input-Output Table (dummy data)</div>
 
+			<div id = "container">
+				<div id = "option-body">
+					Selected Industry: {{ dummy_data.Desc }} <br>
+					Selected Area: Alabama<br>
+					Selected Year: 2015<br>
+					Sector ID: {{ dummy_data.ID }} <br>
+				</div>
+
+
+
+			<div id = "container">
+				<div id="option-body">Download Report as CSV</div>
+			</div>
+			</div>
 		</div>
 	</body>
 </html>

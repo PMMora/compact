@@ -15,15 +15,22 @@
 		<br>
 		<div id="option-title">Simple Analysis</div>
 		<div id="option-subtitle">High-level view of industry-wide impact.</div>
-		<form name = "Simple Analysis" action="results" method ="get">
+		<form name = "Simple Analysis" action="results_simple" method ="get">
 			<div id="container">
 				<div id="option-body">Industry:</div><br>
   					{{ simple_analysis.industry }}
 			</div>
+
 			<div id="container">
 				<div id="option-body">Area:</div><br>
-						{{ simple_analysis.state }}
+						{{ simple_analysis.area }}
 			</div>
+
+			<div id="container">
+				<div id="option-body">Year:</div><br>
+						{{ simple_analysis.year }}
+			</div>
+
 			<br>
 			<div id="container">
 				<input type="submit" value="Run Report">
@@ -31,7 +38,7 @@
 		</form>
 		<div id="option-title">Advanced Analysis</div>
 		<div id="option-subtitle">Filter by 6-digit NAICS code and custom business details.</div>
-		<form name = "Advanced Analysis" action="results" method ="post">
+		<form name = "Advanced Analysis" action="results_advanced" method ="get">
 			<div id="container">
 				<div id="option-body">NAICS Code:</div><br>
 				{{ advanced_analysis.naics }}
@@ -39,7 +46,12 @@
 
 			<div id="container">
 				<div id="option-body">Area:</div><br>
-					{{ advanced_analysis.state }}
+					{{ advanced_analysis.area }}
+			</div>
+
+			<div id="container">
+				<div id="option-body">Year:</div><br>
+						{{ simple_analysis.year }}
 			</div>
 
 			<div id="container">

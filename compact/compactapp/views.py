@@ -5,24 +5,67 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from compactapp.models import Area
 from .forms import SimpleAnalysis
 from .forms import AdvancedAnalysis
-
-import xlrd
+import json
+import json2html
 
 
 # Create your views here.
 def home(request):
-    template = loader.get_template('base.html')
+    """Home page - presents the user with the blank forms"""
+
     simple_analysis = SimpleAnalysis()
     advanced_analysis = AdvancedAnalysis()
 
     return render(request, 'base.html', {'simple_analysis': simple_analysis, 'advanced_analysis': advanced_analysis})
 
-def results(request):
+def results_simple(request):
 
-    template = loader.get_template('results.html')
+    """Results page - presents the user with the output of the impact analysis model"""
+    if request.method == 'POST':
+        #create a form instance and populate it with data from the request
+        try:
+            simple_analysis = SimpleAnalysis(request.POST)
+            if simple_analysis.is_valid():
+                #TODO replace this with getting output and rendering
+                return render(request, 'results_simple.html', {'simple_analysis': simple_analysis})
+        except:
+            return HttpResponseRedirect('error')
+    else:
+        #Temporary code to practice rendering results
+        #todo remove this shit
 
+            #experimenting with searching and rendering sample output
+        test_file = open("test_output.json")
+        raw_output = test_file.read()
+        my_dict = json.loads(raw_output)
+        searched_id = '111CA'
+        dummy_data = []
+        for item in my_dict[2:len(my_dict)]:
+            for key, value in item.items():
+                if key == "ID" and searched_id in value:
+                    dummy_data = item
+        return render(request, 'results_simple.html', {'dummy_data':dummy_data})
+        
+def results_advanced(request):
 
-    return HttpResponse(template.render())
+    """Results page - presents the user with the output of the impact analysis model"""
+    if request.method == 'POST':
+        #create a form instance and populate it with data from the request
+        try:
+            advanced_analysis = AdvancedAnalysis(request.POST)
+
+            if advanced_analysis.emp_based_lc == True and advanced_analysis.wage_based_lc == True:
+                return HttpResponseRedirect('error')
+
+            if advanced_analysis.is_valid():
+                #TODO replace this with getting output and rendering
+                #results = complex_impact()
+                return render(request, 'results_advanced.html', {'advanced_analysis': advanced_analysis})
+                #
+        except:
+            return HttpResponseRedirect('error')
+
+    
 
 def error_page(request):
     template = loader.get_template('error_page.html')
