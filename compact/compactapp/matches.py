@@ -36,7 +36,7 @@ naicsmatch = [
             {'NAICS': 3369, 'IO': 16, 'desc': 'Other transportation equipment'},
             {'NAICS': 337, 'IO': 17, 'desc': 'Furniture and related products'},
             {'NAICS': 339, 'IO': 18, 'desc': 'Miscellaneous manufacturing'},
-            {'NAICS': 420, 'IO': 27, 'desc': 'Wholesale trade'},
+            {'NAICS': 42, 'IO': 27, 'desc': 'Wholesale trade'},
             {'NAICS': 441, 'IO': 28, 'desc': 'Motor vehicle and parts dealers'},
             {'NAICS': 442, 'IO': 31, 'desc': 'Other retail'},
             {'NAICS': 443, 'IO': 31, 'desc': 'Other retail'},
