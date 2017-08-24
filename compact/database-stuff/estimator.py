@@ -66,7 +66,7 @@ with conn:
         est_wages = 0
 
         undisclosed_rows = 0
-
+        #Adjust gen_naics for those naics that are grouped into bunches
         if int(gen_naics) in [31,32,33]:
             gen_naics = '31-33'
         elif int(gen_naics) in [44,45]:
@@ -76,17 +76,19 @@ with conn:
 
         totals = get_totals_of_non_disclosed_naics(conn, gen_naics, year, area)
 
-
+        #If the totals are undisclosed grab US totals and get employee and wage value based on establishment ratio
         if totals[3]==0 and totals[4]==0:
             us_totals = get_us_totals(conn, gen_naics, year)
             estab_ratio = float(row[3]/us_totals[2])      
             est_employees = us_totals[3]*estab_ratio
             est_wages = us_totals[4]*estab_ratio
 
+        #If total is disclosed, subtract disclosed values and distribute remainder to undisclosed rows
         else:
             total_employees = totals[3]
             total_wages = totals[4]
-
+            
+            #If gen_naics was a group, go back and get the individual naics value
             if isinstance(gen_naics, str):
                 gen_naics = row[1][:-1]
 

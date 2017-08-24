@@ -1,6 +1,7 @@
 import os, csv, sqlite3
 
 def get_header_index(file):
+    '''Return list of index values of the necessary headers'''
     fips = 'area_fips'
     own_code = 'own_code'
     naics = 'industry_code'
@@ -35,8 +36,8 @@ def create_yield_row(conn, yield_row):
     cur.execute(sql, yield_row)
     return cur.lastrowid
 
-def parse_all_csv_into_db():
-    '''Soooo this actually only parses the CSV into the yield table, it's a misnomer'''
+def parse_all_csv_into_yield():
+    '''Loop through the CSV and populate the yield table'''
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
     for root, dir, files in os.walk('CSV_files'):
@@ -52,10 +53,11 @@ def parse_all_csv_into_db():
                         info = []
                         for i in indexes:
                             if i == indexes[0]:
+                                #For the fips code we only need the first 2 digits
                                 info.append(row[i][:2])
                             else:
                                 info.append(row[i])
                         if info:
                             create_yield_row(conn, info)
 
-parse_all_csv_into_db()
+parse_all_csv_into_yield()
