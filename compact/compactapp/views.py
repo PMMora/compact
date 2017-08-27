@@ -6,7 +6,7 @@ from compactapp.models import Area
 from .forms import SimpleAnalysis
 from .forms import AdvancedAnalysis
 import json
-import json2html
+#from json2html import *
 
 
 # Create your views here.
@@ -32,19 +32,22 @@ def results_simple(request):
             return HttpResponseRedirect('error')
     else:
         #Temporary code to practice rendering results
-        #todo remove this shit
+        #TODO remove this shit
 
             #experimenting with searching and rendering sample output
         test_file = open("test_output.json")
         raw_output = test_file.read()
         my_dict = json.loads(raw_output)
-        searched_id = '111CA'
+        searched_id = '113FF'
         dummy_data = []
+
         for item in my_dict[2:len(my_dict)]:
             for key, value in item.items():
                 if key == "ID" and searched_id in value:
                     dummy_data = item
-        return render(request, 'results_simple.html', {'dummy_data':dummy_data})
+
+        #json_table = json2html.convert(json = my_dict)
+        return render(request, 'results_simple.html', {'results':dummy_data})
         
 def results_advanced(request):
 
@@ -64,6 +67,24 @@ def results_advanced(request):
                 #
         except:
             return HttpResponseRedirect('error')
+    else:
+        #Temporary code to practice rendering results
+        #TODO remove this shit
+
+            #experimenting with searching and rendering sample output
+        test_file = open("test_output.json")
+        raw_output = test_file.read()
+        my_dict = json.loads(raw_output)
+        searched_id = '113FF'
+        dummy_data = []
+
+        for item in my_dict[2:len(my_dict)]:
+            for key, value in item.items():
+                if key == "ID" and searched_id in value:
+                    dummy_data = item
+
+        #json_table = json2html.convert(json = my_dict)
+        return render(request, 'results_simple.html', {'results':dummy_data})
 
     
 

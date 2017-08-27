@@ -22,7 +22,7 @@ class SimpleAnalysis(forms.Form):
     sector_NAICS = list(item for item in sheet.col_values(3))
     #Gets all sector IDs, NAICS, and industry names from the excel sheet provided by Eric.
 
-    industries = ["Sector ID: {} | {} | NAICS Code {}".format(int(ID), desc, int(NAICS)) for ID, desc, NAICS in zip(sector_ID, sector_description, sector_NAICS)]
+    industries = ["{} | NAICS Code {}".format(desc, int(NAICS)) for desc, NAICS in zip(sector_description, sector_NAICS)]
     industries = zip(sector_ID, industries)
     #Formats the menu item choices for Industries and zips them into a list of tuples.
 
