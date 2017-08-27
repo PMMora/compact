@@ -84,7 +84,7 @@ def results_advanced(request):
                     dummy_data = item
 
         #json_table = json2html.convert(json = my_dict)
-        return render(request, 'results_simple.html', {'results':dummy_data})
+        return render(request, 'results_advanced.html', {'results':dummy_data})
 
     
 
