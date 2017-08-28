@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Compact Input/Output Report Generator</title>
+	</head>
+
+	<link type="text/css" rel="stylesheet" href="{% static 'styles.css' %}">
+	<body>
+		<div id="page-border">
+			<header>Compact Input/Output Report Generator</header>
+			<div id="header-menu"><a href="/">Home</a> | <a href="/about">About</a> | <a href="/user_manual">User Manual</a> | <a href="/faq">FAQ</a></div>
+			<br>
+			<br>
+			<br>
+
+			<div id="option-title">About Compact Input/Output Report Generator</div>
+			<div id="container">
+			<div id="option-body">This impact analysis tool was designed to calculate the effects of state-level industry spending on other industries in the same area.<br>
+				<br>
+				The initial data set for this project is obtained from the <a href="https://www.bls.gov/data/#api">Bureau of Labor Statistics API</a>. This data is then parsed and run through an impact analysis model designed to calculate the direct, indirect, and induced impacts of a given industry (identified by NAICS code) across three categories: Revenue, Employment, and Wages.
+				<br>
+				<br>
+				Data is then rendered similar to a Direct Impact table for a national-scale impact analysis report. All pages are printer friendly and allow for individual export of tables and charts.
+				<br>
+				<br>
+				Please note that for industries in which employment data is not disclosed by by the Bureau of Labor Statistics, calculations were provided based on estimates.
+			</div>
+			</div>
+			<div id="option-title">Credits for the project go to:</div>
+			<div id="container">
+			<div id="option-body">
+				Eric Viola - Impact Analysis Model<br>
+				<br>
+				Gabe Mora - API and Database Programming<br>
+				<br>
+				Kayla Heard - Web Design and Programming
+			</div>
+			</div>
+			<br>
+			<br>
+			<br>
+
+		</div>
+	</body>
+</html>
+
