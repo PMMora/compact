@@ -2,7 +2,6 @@ from django.shortcuts import render
 
 from django.template import Context, loader, Template
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from compactapp.models import Area
 from .forms import SimpleAnalysis
 from .forms import AdvancedAnalysis
 import json
