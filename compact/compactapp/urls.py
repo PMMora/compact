@@ -1,5 +1,6 @@
 from django.conf.urls import url
 #, include
+
 from .views import home
 from .views import results_simple
 from .views import results_advanced
@@ -7,6 +8,7 @@ from .views import error_page
 from .views import about
 from .views import user_manual
 from .views import faq
+from .views import home_screen
 #from rest_framework import routers
 #from compact import views
 

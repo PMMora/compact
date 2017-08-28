@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .forms import SimpleAnalysis
 from .forms import AdvancedAnalysis
 import json
-#from json2html import *
 
 
 # Create your views here.
@@ -102,3 +101,4 @@ def user_manual(request):
 def faq(request):
     template = loader.get_template('faq.html')
     return HttpResponse(template.render())
+
