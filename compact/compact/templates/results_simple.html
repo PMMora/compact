@@ -1,7 +1,5 @@
 {% load staticfiles %}
 
-{% csrf_token %}
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -10,14 +8,15 @@
 
 	<link type="text/css" rel="stylesheet" href="{% static 'styles.css' %}">
 	<body>
+	{% csrf_token %}
 		<div id="page-border">
 			<header>Compact Input/Output Report Generator</header>
 			<div id="header-menu"><a href="/">Home</a> | <a href="/about">About</a> | <a href="/user_manual">User Manual</a> | <a href="/faq">FAQ</a></div>
 			<div id="option-title">Direct Impacts Table - Simple Analysis</div>
 			<div id="option-subtitle">
-				Selected Industry: {{ results.Desc }} <br>
-				Selected Area: Alabama<br>
-				Selected Year: 2015<br>
+				Selected Industry: {{ searched_industry }} <br>
+				Selected Area: {{ searched_area }}<br>
+				Selected Year: {{ searched_year }}<br>
 			</div>
 			<br>
 
@@ -59,15 +58,15 @@
 					    },
 					    series: [{
 					        name: 'Direct',
-					        data: [{{ results.direct_rev }}, {{ results.direct_emp }}, {{ results.direct_wage }}],
+					        data: [{{ direct_revenue }}, {{ direct_employment }}, {{ direct_wage }}],
 					        color: '#565b77'
 					    }, {
 					        name: 'Indirect',
-					        data: [{{ results.indirect_rev }}, {{ results.indirect_emp }}, {{ results.indirect_wage }}],
+					        data: [{{ indirect_revenue }}, {{ indirect_employment }}, {{ indirect_wage }}],
 					        color: '#8db9c1'
 					    }, {
 					        name: 'Induced',
-					        data: [{{ results.induced_rev }}, {{ results.induced_emp }}, {{ results.induced_wage }}],
+					        data: [{{ induced_wage }}, {{ induced_emp }}, {{ induced_wage }}],
 					        color: '#9cfcee'
 					    }]
 					});
@@ -163,8 +162,13 @@
 				  });
 				});
 				</script>
+			<div id="container">
+				<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+				<div id="option-body"><a href="#" class="export">Export Table to CSV</a></div>
+			</div>
 				<table id="direct_impacts">
 					<thead>
+						<th colspan="1">Industry Description</th>
 						<th colspan="3">Revenue</th>
 						<th colspan="3">Employment</th>
 						<th colspan="3">Wages</th>
@@ -172,6 +176,7 @@
 					
 					<tbody>
 						<tr>
+							<td></td>
 							<td>Direct</td>
 							<td>Indirect</td>
 							<td>Induced</td>
@@ -182,25 +187,29 @@
 							<td>Indirect</td>
 							<td>Induced</td>
 						</tr>
-						<tr>
-							<td>{{ results.direct_rev }}</td>
-							<td>{{ results.indirect_rev }}</td>
-							<td>{{ results.induced_rev }}</td>
-							<td>{{ results.direct_emp }}</td>
-							<td>{{ results.indirect_emp }}</td>
-							<td>{{ results.induced_emp }}</td>
-							<td>{{ results.direct_wage }}</td>
-							<td>{{ results.indirect_wage }}</td>
-							<td>{{ results.induced_wage }}</td>
-						</tr>
+
+						{% for dictionary in results %}
+
+							<tr>
+								<td>{{ dictionary.Desc }}</td>
+								<td>{{ dictionary.direct_rev }}</td>
+								<td>{{ dictionary.indirect_rev }}</td>
+								<td>{{ dictionary.induced_rev }}</td>
+								<td>{{ dictionary.direct_emp }}</td>
+								<td>{{ dictionary.indirect_emp }}</td>
+								<td>{{ dictionary.induced_emp }}</td>
+								<td>{{ dictionary.direct_wage }}</td>
+								<td>{{ dictionary.indirect_wage }}</td>
+								<td>{{ dictionary.induced_wage }}</td>
+							</tr>
+
+						{% endfor %}
 					</tbody>
 				</table>
+
 			</div>
 			<br>
-			<div id="container">
-				<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-				<div id="option-body"><a href="#" class="export">Export Table to CSV</a></div>
-			</div>
+
 			</div>
 		</div>
 	</body>

@@ -2,11 +2,13 @@ body {
     background-image:url(https://static.pexels.com/photos/373965/pexels-photo-373965.jpeg);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: center top;
     color: #111;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     padding:0;
 }
+
+
 
 #page-border {
     margin-top:5px;
@@ -36,21 +38,11 @@ header {
     margin:15px;
     padding:0;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 26px;
-    color:#00203a;
-}
-#option-subtitle {
-    margin:15px;
-    margin-right:600px;
-=======
-#option_title {
-    margin:15px;
-    padding:0;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 36px;
     color:#00203a;
 }
-#option_subtitle {
+
+#option-subtitle {
     margin:15px;
     margin-right:300px;
     padding:0;
@@ -62,7 +54,7 @@ header {
     border-color:#000;
 }
 
-#option_body {
+#option-body {
     padding:0;
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 14px;
@@ -70,16 +62,11 @@ header {
     float:left;
 }
 
-}
 #container {
     margin:15px;
-    margin-right:100px;
-    padding:0;
-    margin-top: 0px;
+    margin-right:50px;
     display: inline-block;
 }
-
-
 
 #header-menu {
     text-align: right;
@@ -157,6 +144,7 @@ th {
 
 td {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 10px;
     text-align: center;
     border-right: 1px solid #fff;
     border-left: 1px solid #e8e8e8;
@@ -168,7 +156,8 @@ td {
 }
 
 td:nth-child(1) {
-    background: #d3e5a7;
+    background: #afafaf;
+    font-size: 12px;
 }
 td:nth-child(2) {
     background: #d3e5a7;
@@ -177,7 +166,7 @@ td:nth-child(3) {
     background: #d3e5a7;
 }
 td:nth-child(4) {
-    background: #a7e5da;
+    background: #d3e5a7;
 }
 td:nth-child(5) {
     background: #a7e5da;
@@ -186,12 +175,15 @@ td:nth-child(6) {
     background: #a7e5da;
 }
 td:nth-child(7) {
-    background: #e5c6a7;
+    background: #a7e5da;
 }
 td:nth-child(8) {
     background: #e5c6a7;
 }
 td:nth-child(9) {
+    background: #e5c6a7;
+}
+td:nth-child(10) {
     background: #e5c6a7;
 }
 
