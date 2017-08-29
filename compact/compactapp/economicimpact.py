@@ -1,4 +1,4 @@
-from matrixtools import blank_matrix, \
+from .matrixtools import blank_matrix, \
     identity_matrix, \
     short_to_long, \
     long_to_short, \
@@ -17,8 +17,8 @@ import numpy
 import os
 import sqlite3
 
-from matches import naicsmatch, fipsmatch
-from UStable import raw_direct_requirements, industry_totals
+from .matches import naicsmatch, fipsmatch
+from .UStable import raw_direct_requirements, industry_totals
 
 # Query function copied from queries.py until directory is fixed
 def select_column_yield(conn, column_name, fips, own, naics, year):

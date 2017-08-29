@@ -15,7 +15,8 @@
 		<br>
 		<div id="option-title">Simple Analysis</div>
 		<div id="option-subtitle">High-level view of industry-wide impact.</div>
-		<form name = "Simple Analysis" action="results_simple" method ="get">
+		<form name = "Simple Analysis" action="results_simple" method ="post">
+			{% csrf_token %}
 			<div id="container">
 				<div id="option-body">Industry:</div><br>
   					{{ simple_analysis.industry }}
@@ -38,7 +39,8 @@
 		</form>
 		<div id="option-title">Advanced Analysis</div>
 		<div id="option-subtitle">Filter by 6-digit NAICS code and custom business details.</div>
-		<form name = "Advanced Analysis" action="results_advanced" method ="get">
+		<form name = "Advanced Analysis" action="results_advanced/" method ="post">
+			{% csrf_token %}
 			<div id="container">
 				<div id="option-body">NAICS Code:</div><br>
 				{{ advanced_analysis.naics }}
