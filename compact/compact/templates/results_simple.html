@@ -14,9 +14,9 @@
 			<div id="header-menu"><a href="/">Home</a> | <a href="/about">About</a> | <a href="/user_manual">User Manual</a> | <a href="/faq">FAQ</a></div>
 			<div id="option-title">Direct Impacts Table - Simple Analysis</div>
 			<div id="option-subtitle">
-				Selected Industry: {{ searched_industry }} <br>
-				Selected Area: {{ searched_area }}<br>
-				Selected Year: {{ searched_year }}<br>
+				Selected Industry: {{ industry }} <br>
+				Selected Area: {{ area }}<br>
+				Selected Year: {{ year }}<br>
 			</div>
 			<br>
 
@@ -66,7 +66,7 @@
 					        color: '#8db9c1'
 					    }, {
 					        name: 'Induced',
-					        data: [{{ induced_wage }}, {{ induced_emp }}, {{ induced_wage }}],
+					        data: [{{ induced_revenue }}, {{ induced_employment }}, {{ induced_wage }}],
 					        color: '#9cfcee'
 					    }]
 					});

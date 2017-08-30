@@ -37,10 +37,15 @@
 				<input type="submit" value="Run Report">
 			</div>
 		</form>
+		<br>
+		<br>
+
 		<div id="option-title">Advanced Analysis</div>
 		<div id="option-subtitle">Filter by 6-digit NAICS code and custom business details.</div>
-		<form name = "Advanced Analysis" action="results_advanced/" method ="post">
+		<form name = "Advanced Analysis" action="results_advanced" method="post">
+			
 			{% csrf_token %}
+			
 			<div id="container">
 				<div id="option-body">NAICS Code:</div><br>
 				{{ advanced_analysis.naics }}
@@ -70,13 +75,7 @@
 				<div id="option-body">Wages (Annual Total):</div><br>
 				{{ advanced_analysis.wages_annual }}
 			</div>
-
 			<br>
-
-			<div id="container">
-				<input type="submit" value="Run Report">
-			</div>
-
 			<div id="option-title">Additional options</div>
 			<div id="option-subtitle">Only applicable to Advanced Analysis. If used, please select only one.</div>
 
@@ -88,8 +87,10 @@
 				 {{ advanced_analysis.wage_based_lc }}
 				 <label for="WageBasedLC">Use Wage-Based Location Quotients</label>
 			</div>
-
-
+			<br>
+			<div id="container">
+				<input type="submit" value="Run Report">
+			</div>
 		</form>
 		<br>
 		<br>

@@ -38,15 +38,18 @@ class SimpleAnalysis(forms.Form):
 class AdvancedAnalysis(forms.Form):
 
     areas = Area.objects.values('name')
-    area_list = list(entry['name'] for entry in areas)
-    area_list.insert(0, 'US')
-    area_number = list(range(0, len(area_list)))
-    area_list = zip(area_number, area_list)
+    area_name = list(entry['name'] for entry in areas)
+    area_name.insert(0, 'US')
+    area_number = list(range(0, len(area_name)))
+    area_list = zip(area_number, area_name)
     # Extremely unpythonic repetition of above code, however, Flask will not render the state list if I attempt to reuse the same code, because reasons
+
+    year_choices = [2015]
+    year_id = list(range(0, len(year_choices)))
 
     naics = forms.CharField(min_length=3, max_length=6, initial='111')
     area = forms.ChoiceField(choices=area_list)
-    year = forms.ChoiceField(choices=[(1, 2015)])
+    year = forms.ChoiceField(choices=zip(year_id, year_choices))
     revenue = forms.IntegerField(min_value=0, max_value=999999999999, initial=0)
     employees = forms.IntegerField(min_value=0, max_value=999999, initial=0)
     wages_annual = forms.IntegerField(min_value=0, max_value=999999999999, initial=0)
