@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^results_simple', 'compactapp.views.results_simple', name='results_simple'),
     url(r'^results_simple/', 'compactapp.views.results_simple', name='results_simple'),
     url(r'^results_advanced', 'compactapp.views.results_advanced', name='results_advanced'),
+    url(r'^results_advanced/', 'compactapp.views.results_advanced', name='results_advanced'),
     url(r'^error_page', 'compactapp.views.error_page', name='error_page'),
     url(r'^about', 'compactapp.views.about', name='about'),
     url(r'^user_manual', 'compactapp.views.user_manual', name='user_manual'),

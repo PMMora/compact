@@ -25,19 +25,20 @@ def results_simple(request):
     if request.method == 'POST':
         #create a form instance and populate it with data from the request
         completed_form = SimpleAnalysis(request.POST)
-
+        #create a blank form instance to use for populating label of user-selected choices
         simple_analysis = SimpleAnalysis()
 
         if completed_form.is_valid():
             #Get searched industry, name, and year from the form
-            searched_industry_index = int(completed_form.cleaned_data['industry'])
-            searched_industry = simple_analysis.sector_description[searched_industry_index]
-            searched_area = simple_analysis.area_name[int(completed_form.cleaned_data['area'])]
-            searched_year = simple_analysis.year_choices[int(completed_form.cleaned_data['year'])]
+            industry_index = int(completed_form.cleaned_data['industry'])
+            industry = simple_analysis.sector_description[industry_index]
+            area = simple_analysis.area_name[int(completed_form.cleaned_data['area'])]
+            year = simple_analysis.year_choices[int(completed_form.cleaned_data['year'])]
             #Run the impact analysis model with the searched values from the form.
-            results = simple_impact(user_input=[str(searched_area),searched_year,searched_industry_index])
+            results = simple_impact(user_input=[str(area),year,industry_index])
 
             #Get totals of each field for chart - iterating through dict at template level highly affected latency
+            #TODO create function to parse dictionaries, and replace this chunk of code below
             direct_revenue = 0
             direct_employment = 0
             direct_wage = 0
@@ -60,17 +61,12 @@ def results_simple(request):
                 induced_employment += dictionary['induced_emp']
                 induced_wage += dictionary['induced_wage']
 
-        else:
-            results = "Unavailable"
-            searched_industry = "Unavailable"
-            searched_area = "Unavailable"
-
         return render(request, 'results_simple.html', {
             'simple_analysis': simple_analysis, 
             'results': results, 
-            'searched_industry': searched_industry, 
-            'searched_area': searched_area, 
-            'searched_year': searched_year,
+            'industry': industry, 
+            'area': area, 
+            'year': year,
             'direct_revenue': direct_revenue,
             'direct_employment': direct_employment,
             'direct_wage': direct_wage,
@@ -82,48 +78,93 @@ def results_simple(request):
             'induced_wage': induced_wage,
             }
             )
-
+    #If request_method != POST, return error
     else:
         return HttpResponseRedirect('/error_page')
-        
+
+
 def results_advanced(request):
-
     """Results page - presents the user with the output of the impact analysis model"""
-    if request.method == 'POST':
+    if request.method == "POST":
         #create a form instance and populate it with data from the request
-        try:
-            advanced_analysis = AdvancedAnalysis(request.POST)
+        completed_form = AdvancedAnalysis(request.POST)
+        #create a blank form instance to use for populating label of user-selected choices
+        advanced_analysis = AdvancedAnalysis()
 
-            if advanced_analysis.emp_based_lc == True and advanced_analysis.wage_based_lc == True:
-                return HttpResponseRedirect('error')
 
-            if advanced_analysis.is_valid():
-                #TODO replace this with getting output and rendering
-                #results = complex_impact()
-                return render(request, 'results_advanced.html', {'advanced_analysis': advanced_analysis})
-                #
-        except:
-            return HttpResponseRedirect('error')
+        if completed_form.is_valid():
+            #Get searched industry, name, and year from the form
+            naics = int(completed_form.cleaned_data['naics'])
+            area = advanced_analysis.area_name[int(completed_form.cleaned_data['area'])]
+            year = advanced_analysis.year_choices[int(completed_form.cleaned_data['year'])]
+            revenue = completed_form.cleaned_data['revenue']
+            employees = completed_form.cleaned_data['employees']
+            wages = completed_form.cleaned_data['wages_annual']
+            LQ_display = ""
+            LQ_type = ""
+
+            #Checks for additional options
+            if completed_form.cleaned_data['emp_based_lc'] == True and completed_form.cleaned_data['wage_based_lc'] == True:
+                return HttpResponseRedirect('/error_page')
+            elif completed_form.cleaned_data['emp_based_lc'] == True:
+                LQ_type = "employees"
+                LQ_display = "Employee-Based"
+            else:
+                LQ_type = "wages"
+                LQ_display = "Wage-Based"
+
+            #Run the impact analysis model with the searched values from the form.
+            results = complex_impact(user_input=[str(area),year,[naics, employees, revenue, wages], LQ_type])
+
+            #Get totals of each field for chart - iterating through dict at template level highly affected latency
+            #TODO create function to parse dictionaries, and replace this chunk of code below
+            
+            direct_revenue = 0
+            direct_employment = 0
+            direct_wage = 0
+            indirect_revenue = 0
+            indirect_employment = 0
+            indirect_wage = 0
+            induced_revenue = 0
+            induced_employment = 0
+            induced_wage = 0
+
+
+            for dictionary in results:
+                direct_revenue += dictionary['direct_rev']
+                direct_employment += dictionary['direct_emp']
+                direct_wage += dictionary['direct_wage']
+                indirect_revenue += dictionary['indirect_rev']
+                indirect_employment += dictionary['indirect_emp']
+                indirect_wage += dictionary['indirect_wage']
+                induced_revenue += dictionary['induced_rev']
+                induced_employment += dictionary['induced_emp']
+                induced_wage += dictionary['induced_wage']
+                
+        return render(request, 'results_advanced.html', {
+            'advanced_analysis': advanced_analysis,
+            'results': results,
+            'naics':naics,
+            'area':area,
+            'year':year,
+            'revenue':revenue,
+            'employees':employees,
+            'wages': wages,
+            'LQ_display': LQ_display,
+            'direct_revenue': direct_revenue,
+            'direct_employment': direct_employment,
+            'direct_wage': direct_wage,
+            'indirect_revenue': indirect_revenue,
+            'indirect_wage': indirect_wage,
+            'indirect_employment': indirect_employment,
+            'induced_revenue': induced_revenue,
+            'induced_employment': induced_employment,
+            'induced_wage': induced_wage,
+            }
+            )
+        #If request_method != POST, return error
     else:
-        #Temporary code to practice rendering results
-        #TODO remove this shit
-
-            #experimenting with searching and rendering sample output
-        test_file = open("test_output.json")
-        raw_output = test_file.read()
-        my_dict = json.loads(raw_output)
-        searched_id = '113FF'
-        dummy_data = []
-
-        for item in my_dict[2:len(my_dict)]:
-            for key, value in item.items():
-                if key == "ID" and searched_id in value:
-                    dummy_data = item
-
-        #json_table = json2html.convert(json = my_dict)
-        return render(request, 'results_advanced.html', {'results':dummy_data})
-
-    
+        return HttpResponseRedirect('/error_page')
 
 def error_page(request):
     template = loader.get_template('error_page.html')
